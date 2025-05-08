@@ -1,1 +1,9 @@
-export class CreateFamilyDto {}
+import { IsOptional, IsString } from 'class-validator';
+
+export class CreateFamilyDto {
+  @IsString()
+  name: string;
+  @IsString()
+  @IsOptional()
+  description?: string;
+}
