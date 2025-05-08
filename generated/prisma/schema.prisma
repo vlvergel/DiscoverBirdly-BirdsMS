@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Bird {
+  id          String   @id @default(cuid())
+  name        String
+  id_specie   String
+  id_family   String
+  id_habitat  String
+  audio_url   String?
+  photo       String
+  description String
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  specie      Specie   @relation(fields: [id_specie], references: [id])
+  family      Family   @relation(fields: [id_family], references: [id])
+  habitat     Habitat  @relation(fields: [id_habitat], references: [id])
+
+  @@index([status])
+}
+
+model Specie {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Bird        Bird[]
+
+  @@index([status])
+}
+
+model Family {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Bird        Bird[]
+
+  @@index([status])
+}
+
+model Habitat {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Bird        Bird[]
+
+  @@index([status])
+}
